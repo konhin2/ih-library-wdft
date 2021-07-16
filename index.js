@@ -5,7 +5,7 @@ const app = express()
 const mongoose = require('mongoose')
 const bodyParser    = require("body-parser")
 
-const Book = require('./models/book')
+const Book = require('./models/Book')
 
 // 2. MIDDLEWARES
 require('dotenv').config()
