@@ -1,5 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;300&display=swap');
 * {
-    background-color: green;
+    background-color: #404040;
+    color: white;
     font-family: 'Roboto', sans-serif;
 }
