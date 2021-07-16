@@ -1,0 +1,8 @@
+<h1>Libros</h1>
+
+{{#each books}}
+    <h3>{{this.title}}</h3>
+    <p>{{this.author}}</p>
+    <a href="/books/{{this._id}}">Ver detalles</a>
+    <hr>
+{{/each}}
