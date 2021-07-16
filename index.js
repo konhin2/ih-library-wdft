@@ -3,6 +3,7 @@ const { response } = require('express')
 const express = require('express')
 const app = express()
 const mongoose = require('mongoose')
+const bodyParser    = require("body-parser")
 
 const Book = require('./models/book')
 
@@ -17,6 +18,7 @@ mongoose.connect(process.env.MONGODB, {
     .then(() => console.log('Conectados a MongoDB'))
     .catch((err) => console.log(err))
 
+app.use(bodyParser.urlencoded({extended:true}))
 app.use(express.static('./public'))
 app.set('view engine', 'hbs')
 
@@ -36,6 +38,7 @@ app.get("/books", (req, res) => {
         .catch((err) => console.log(err))
 })
 
+// QUERY PARAMS
 app.get("/books/:bookId", (req, res) => {
     console.log("Este es el req.params", req.params)
     const { bookId } = req.params
@@ -48,6 +51,19 @@ app.get("/books/:bookId", (req, res) => {
             })
         })
         .catch((err) => console.log(err))
+})
+
+// QUERY STRINGS
+app.get("/Search", (req, res) => {
+    const queries = req.query
+    res.render("search", {
+        busqueda: queries
+    })
+})
+
+app.post("/search", (req, res) => {
+    const valorDelFormulario = req.body
+    res.redirect(`/search?palabra=${valorDelFormulario.palabra}&nombre=${valorDelFormulario.nombre}&apellido=${valorDelFormulario.apellido}`)
 })
 // 4. SERVIDOR
 // 
