@@ -37,7 +37,17 @@ app.get("/books", (req, res) => {
         })
         .catch((err) => console.log(err))
 })
-
+app.get('/books/create', (req, res) => {
+    res.render('book-create')
+})
+app.post('/books/create', (req, res) => {
+    const { title, author, description, rating} = req.body
+    Book.create({title, author, description, rating})
+        .then(() => {
+            res.redirect('/books')
+        })
+        .catch((err) => console.log(err))
+})
 // QUERY PARAMS
 app.get("/books/:bookId", (req, res) => {
     console.log("Este es el req.params", req.params)
@@ -65,6 +75,39 @@ app.post("/search", (req, res) => {
     const valorDelFormulario = req.body
     res.redirect(`/search?palabra=${valorDelFormulario.palabra}&nombre=${valorDelFormulario.nombre}&apellido=${valorDelFormulario.apellido}`)
 })
+
+app.get('/books/:bookId/edit', (req, res) => {
+    const { bookId } = req.params
+    Book.findById(bookId)
+        .then((foundBook) => {
+            console.log("Libro encontrado", foundBook)
+            res.render('book-edit', {
+                book: foundBook
+            })
+        })
+        .catch((err) => console.log(err))
+})
+
+app.post('/books/:bookId/edit', (req, res) => {
+    // Parametros de la URL
+    const { bookId } = req.params
+    // Datos del formulario
+    const { title, author, description, rating } = req.body
+
+    Book.findByIdAndUpdate(bookId, {title, author, description, rating}, {new: true})
+        .then((bookUpdated) => {
+            res.redirect(`/books/${bookUpdated.id}`)
+        })
+        .catch((err) => console.log(err))
+})
+
+app.post('/books/:bookId/delete', (req, res) => {
+    const { bookId } = req.params
+    Book.findByIdAndDelete(bookId)
+        .then(() => res.redirect("/books"))
+        .catch((err) => console.log(err))
+})
+
 // 4. SERVIDOR
 // 
 app.listen(process.env.PORT, () => {
